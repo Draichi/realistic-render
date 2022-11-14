@@ -1,23 +1,24 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import { setupCounter } from './counter'
+import * as THREE from 'three'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const canvas = document.querySelector('canvas#webgl') as HTMLCanvasElement
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const scene = new THREE.Scene()
+
+const sphere01 = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 32, 32),
+    new THREE.MeshBasicMaterial()
+)
+scene.add(sphere01)
+
+const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    100
+)
+camera.position.set(0, 0, 2)
+
+const renderer = new THREE.WebGLRenderer({ canvas })
+renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.render(scene, camera)
