@@ -13,6 +13,9 @@ import pz from '/environmentMaps/6/pz.png'
 const canvas = document.querySelector('canvas#webgl') as HTMLCanvasElement
 
 const gui = new GUI()
+const debug = {
+  envMapIntensity: 5,
+}
 
 const scene = new THREE.Scene()
 
@@ -29,8 +32,7 @@ const updateAllMeterials = () => {
       return
     }
 
-    child.material.envMap = environmentMaps
-    child.material.envMapIntensity = 2.5
+    child.material.envMapIntensity = debug.envMapIntensity
   })
 }
 
@@ -56,12 +58,13 @@ gltfLoader.load(
 const cubeTextureLoader = new THREE.CubeTextureLoader()
 const environmentMaps = cubeTextureLoader.load([px, nx, py, ny, pz, nz])
 scene.background = environmentMaps
-
-const sphere01 = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 32, 32),
-  new THREE.MeshStandardMaterial()
-)
-// scene.add(sphere01)
+scene.environment = environmentMaps
+gui
+  .add(debug, 'envMapIntensity')
+  .min(0)
+  .max(10)
+  .step(0.001)
+  .onChange(updateAllMeterials)
 
 const directionalLight = new THREE.DirectionalLight('#ffffff', 4)
 directionalLight.position.set(0.25, 3, 2.25)
@@ -98,7 +101,6 @@ const camera = new THREE.PerspectiveCamera(
   100
 )
 camera.position.set(0, 2, 2)
-camera.lookAt(sphere01.position)
 
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
