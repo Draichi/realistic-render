@@ -57,6 +57,7 @@ gltfLoader.load(
 
 const cubeTextureLoader = new THREE.CubeTextureLoader()
 const environmentMaps = cubeTextureLoader.load([px, nx, py, ny, pz, nz])
+environmentMaps.encoding = THREE.sRGBEncoding
 scene.background = environmentMaps
 scene.environment = environmentMaps
 gui
@@ -109,6 +110,7 @@ controls.dampingFactor = 0.02
 const renderer = new THREE.WebGLRenderer({ canvas })
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.physicallyCorrectLights = true
+renderer.outputEncoding = THREE.sRGBEncoding
 
 const tick = () => {
   controls.update()
